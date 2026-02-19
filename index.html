@@ -10,14 +10,6 @@
     rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    :root {
-      --ink: #0a0a0f;
-      --paper: #f5f0e8;
-      --accent: #c8423a;
-      --mid: #2a2a3a;
-      --line: rgba(10, 10, 15, 0.15);
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -25,35 +17,37 @@
     }
 
     body {
-      background: var(--paper);
-      color: var(--ink);
+      background: #f5f0e8;
+      color: #0a0a0f;
       font-family: 'Space Mono', monospace;
       min-height: 100vh;
     }
 
-    /* ─── GENERATOR MODE ─── */
+    .hidden {
+      display: none !important;
+    }
+
+    /* ══ GENERATOR MODE ══ */
     #generator-mode header {
-      border-bottom: 2px solid var(--ink);
-      padding: 1.5rem 2rem;
+      padding: 1.2rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--ink);
-      color: var(--paper);
+      background: #0a0a0f;
+      color: #f5f0e8;
     }
 
     #generator-mode header h1 {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 1.4rem;
-      letter-spacing: -0.02em;
+      font-size: 1.3rem;
     }
 
     #generator-mode header .badge {
-      background: var(--accent);
+      background: #c8423a;
       color: white;
-      font-size: 0.65rem;
-      padding: 0.25rem 0.6rem;
+      font-size: 0.62rem;
+      padding: 0.2rem 0.6rem;
       letter-spacing: 0.1em;
       font-weight: 700;
     }
@@ -61,7 +55,7 @@
     .layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: calc(100vh - 65px);
+      min-height: calc(100vh - 58px);
     }
 
     @media (max-width: 768px) {
@@ -71,17 +65,26 @@
     }
 
     .form-panel {
-      padding: 2.5rem 2rem;
-      border-right: 2px solid var(--ink);
+      padding: 2rem;
+      border-right: 2px solid #0a0a0f;
+      overflow-y: auto;
+    }
+
+    .preview-panel {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
     }
 
     .panel-title {
       font-family: 'Syne', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: #c8423a;
       margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
@@ -92,116 +95,74 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--accent);
+      background: #c8423a;
       opacity: 0.3;
     }
 
     .field-group {
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
     }
 
     label {
       display: block;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 0.4rem;
+      color: #555;
+      margin-bottom: 0.35rem;
       font-weight: 700;
     }
 
-    input,
-    select,
-    textarea {
+    input {
       width: 100%;
       background: transparent;
-      border: 1.5px solid var(--ink);
-      color: var(--ink);
+      border: 1.5px solid #0a0a0f;
+      color: #0a0a0f;
       font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      padding: 0.6rem 0.8rem;
+      font-size: 0.78rem;
+      padding: 0.55rem 0.75rem;
       outline: none;
-      transition: border-color 0.15s, background 0.15s;
+      transition: border-color 0.15s;
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--accent);
-      background: rgba(200, 66, 58, 0.04);
+    input:focus {
+      border-color: #c8423a;
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.7rem;
     }
 
     .section-divider {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--ink);
-      opacity: 0.4;
-      padding: 1rem 0 0.75rem;
-      border-top: 1px solid var(--line);
-      margin-top: 0.5rem;
+      color: #888;
+      padding: 0.9rem 0 0.7rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      margin-top: 0.3rem;
     }
 
     .generate-btn {
       width: 100%;
-      background: var(--ink);
-      color: var(--paper);
-      border: 2px solid var(--ink);
+      background: #0a0a0f;
+      color: #f5f0e8;
+      border: none;
       font-family: 'Syne', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 0.9rem;
+      padding: 0.85rem;
       cursor: pointer;
-      margin-top: 1.5rem;
-      transition: background 0.15s, color 0.15s;
+      margin-top: 1.2rem;
+      transition: background 0.15s;
     }
 
     .generate-btn:hover {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
-
-    .preview-panel {
-      padding: 2.5rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .url-box {
-      width: 100%;
-      max-width: 340px;
-      margin-top: 1rem;
-      background: var(--ink);
-      color: var(--paper);
-      padding: 0.75rem 1rem;
-      font-size: 0.55rem;
-      word-break: break-all;
-      line-height: 1.6;
-      letter-spacing: 0.04em;
-      opacity: 0.7;
-    }
-
-    .url-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--mid);
-      opacity: 0.6;
-      margin-top: 0.75rem;
-      align-self: flex-start;
-      margin-left: 0;
-      width: 100%;
-      max-width: 340px;
+      background: #c8423a;
     }
 
     .placeholder-msg {
@@ -209,372 +170,222 @@
       flex-direction: column;
       align-items: center;
       gap: 1rem;
-      opacity: 0.35;
-      padding: 4rem 2rem;
+      opacity: 0.3;
+      padding: 4rem 1rem;
       text-align: center;
     }
 
     .placeholder-msg p {
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      line-height: 1.6;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      line-height: 1.7;
     }
 
-    /* Mini card in generator */
     .mini-card {
       width: 100%;
-      max-width: 340px;
-      border: 2px solid var(--ink);
+      max-width: 320px;
+      border: 2px solid #0a0a0f;
       background: white;
-      box-shadow: 6px 6px 0 var(--ink);
-      animation: slideIn 0.4s ease;
+      box-shadow: 5px 5px 0 #0a0a0f;
     }
 
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .mini-card .card-header {
-      background: var(--ink);
-      color: var(--paper);
-      padding: 0.85rem 1rem;
+    .mini-card-header {
+      background: #0a0a0f;
+      color: #f5f0e8;
+      padding: 0.75rem 1rem;
       text-align: center;
     }
 
-    .mini-card .card-header .inst {
+    .mini-card-header .m-inst {
       font-family: 'Syne', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .mini-card .card-header .dept {
-      font-size: 0.58rem;
-      opacity: 0.7;
-      letter-spacing: 0.08em;
-      margin-top: 0.15rem;
+    .mini-card-header .m-dept {
+      font-size: 0.55rem;
+      opacity: 0.6;
+      margin-top: 0.1rem;
     }
 
-    .mini-card .card-body {
+    .mini-card-body {
       padding: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.6rem;
-    }
-
-    .mini-card .qr-section {
-      border-top: 2px solid var(--ink);
-      padding: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .mini-card .qr-label {
-      font-size: 0.5rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--mid);
-      opacity: 0.5;
-    }
-
-    #qr-display canvas,
-    #qr-display img {
-      max-width: 110px !important;
-      height: auto !important;
+      gap: 0.5rem;
     }
 
     .mini-name {
       font-family: 'Syne', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 800;
-      text-align: center;
       text-transform: uppercase;
+      text-align: center;
+    }
+
+    #qr-display canvas,
+    #qr-display img {
+      max-width: 120px !important;
+      height: auto !important;
+    }
+
+    .scan-hint {
+      font-size: 0.52rem;
+      opacity: 0.4;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .url-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #777;
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .url-box {
+      width: 100%;
+      max-width: 320px;
+      background: #0a0a0f;
+      color: #f5f0e8;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.5rem;
+      word-break: break-all;
+      line-height: 1.6;
+      opacity: 0.7;
+      margin-top: 0.3rem;
     }
 
     .actions {
-      margin-top: 1.5rem;
+      margin-top: 1.2rem;
       display: flex;
-      gap: 0.75rem;
+      gap: 0.6rem;
       width: 100%;
-      max-width: 340px;
+      max-width: 320px;
     }
 
     .btn-outline {
       flex: 1;
       background: transparent;
-      border: 2px solid var(--ink);
-      color: var(--ink);
+      border: 2px solid #0a0a0f;
+      color: #0a0a0f;
       font-family: 'Syne', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 0.65rem;
+      padding: 0.6rem;
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
     }
 
     .btn-outline:hover {
-      background: var(--ink);
-      color: var(--paper);
+      background: #0a0a0f;
+      color: #f5f0e8;
     }
 
-    .hidden {
-      display: none;
-    }
-
-    /* ─── CARD DISPLAY MODE (when opened via QR scan) ─── */
+    /* ══ DISPLAY MODE — exact match to the image ══ */
     #display-mode {
       display: none;
       min-height: 100vh;
-      background: #eef2f7;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
+      background: #fff;
       flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
     }
 
-    .full-card {
-      background: white;
+    /* Top bar — same as "Uganda Institute o..." in the image */
+    .d-topbar {
       width: 100%;
-      max-width: 400px;
-      border-radius: 0;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
-      overflow: hidden;
-      animation: rise 0.5s ease;
-    }
-
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .full-card .fc-header {
-      background: #1a2340;
-      color: white;
-      padding: 1.2rem 1.5rem;
+      max-width: 480px;
       text-align: center;
-      position: relative;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #222;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #ddd;
     }
 
-    .fc-header .stripe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 6px;
-      background: linear-gradient(90deg, #c8423a, #e8854a, #c8423a);
+    .d-card {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
     }
 
-    .fc-header .logo-area {
+    /* Centered photo like in the image */
+    .d-photo-area {
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem 1.2rem;
+    }
+
+    .d-photo-box {
+      width: 200px;
+      height: 240px;
+      background: #f0f0f0;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.75rem;
-      margin-top: 0.25rem;
-    }
-
-    .fc-header .logo-circle {
-      width: 40px;
-      height: 40px;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      color: white;
-      flex-shrink: 0;
-    }
-
-    .fc-header .inst-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      line-height: 1.2;
-      text-align: left;
-    }
-
-    .fc-header .inst-sub {
-      font-size: 0.58rem;
-      opacity: 0.6;
-      letter-spacing: 0.1em;
-      text-align: left;
-      margin-top: 0.1rem;
-    }
-
-    .fc-body {
-      padding: 1.5rem;
-    }
-
-    .fc-profile {
-      display: flex;
-      gap: 1.2rem;
-      align-items: flex-start;
-      margin-bottom: 1.2rem;
-    }
-
-    .fc-photo {
-      width: 100px;
-      height: 120px;
-      border: 3px solid #1a2340;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: #eef2f7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      text-align: center;
+      color: #bbb;
+      font-size: 0.75rem;
       overflow: hidden;
     }
 
-    .fc-photo img {
+    .d-photo-box img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .fc-name-block {
-      flex: 1;
-    }
-
-    .fc-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: #1a2340;
-      line-height: 1.2;
-      margin-bottom: 0.5rem;
-    }
-
-    .fc-prog {
-      font-size: 0.65rem;
-      color: #c8423a;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      line-height: 1.4;
-    }
-
-    .fc-divider {
-      border: none;
-      border-top: 2px solid #eef2f7;
-      margin: 0.8rem 0;
-    }
-
-    .fc-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .fc-table tr {
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .fc-table tr:last-child {
-      border-bottom: none;
-    }
-
-    .fc-table td {
-      padding: 0.45rem 0.25rem;
-      vertical-align: top;
-      font-size: 0.72rem;
-    }
-
-    .fc-table td:first-child {
-      color: #888;
-      text-transform: uppercase;
-      font-size: 0.6rem;
-      letter-spacing: 0.08em;
-      width: 38%;
-      padding-right: 0.5rem;
-      font-weight: 700;
-    }
-
-    .fc-table td:last-child {
-      color: #1a2340;
-      font-weight: 700;
-    }
-
-    .fc-cgpa-row td:last-child {
-      color: #c8423a;
-      font-size: 0.95rem;
-    }
-
-    .fc-footer {
-      background: #1a2340;
-      padding: 1rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .fc-footer .verified {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: #6dde9a;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    .fc-footer .verified svg {
-      flex-shrink: 0;
-    }
-
-    .fc-footer .scan-label {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.55rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .powered {
-      margin-top: 1.5rem;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #aaa;
+    /* Light blue-grey name banner — exactly like the image */
+    .d-name-banner {
+      background: #d6e8f0;
       text-align: center;
+      padding: 0.65rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #111;
+      margin: 0 1rem;
+    }
+
+    /* Plain two-column rows — exactly like the image */
+    .d-rows {
+      padding: 0.8rem 1rem 2rem;
+    }
+
+    .d-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 0.45rem 0;
+      font-size: 0.92rem;
+      color: #111;
+      line-height: 1.45;
+    }
+
+    .d-label {
+      width: 110px;
+      flex-shrink: 0;
+      color: #333;
+      font-weight: normal;
+    }
+
+    .d-value {
+      flex: 1;
+      font-weight: bold;
+      color: #000;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ═══════════════════════════════════════════
-     GENERATOR MODE (default view)
-═══════════════════════════════════════════ -->
+  <!-- ══ GENERATOR MODE ══ -->
   <div id="generator-mode">
     <header>
       <h1>Student ID · QR Generator</h1>
@@ -582,7 +393,6 @@
     </header>
 
     <div class="layout">
-      <!-- Form -->
       <div class="form-panel">
         <div class="panel-title">Student Information</div>
 
@@ -590,32 +400,27 @@
           <label>Full Name</label>
           <input type="text" id="f-name" placeholder="e.g. GUMANAMANI ANORLD" value="GUMANAMANI ANORLD">
         </div>
-
         <div class="grid-2">
           <div class="field-group">
             <label>Reg. No.</label>
-            <input type="text" id="f-reg" placeholder="2023/DEE/..." value="2023/DEE/DAY/1244/G">
+            <input type="text" id="f-reg" value="2023/DEE/DAY/1244/G">
           </div>
           <div class="field-group">
             <label>Student No.</label>
-            <input type="text" id="f-std" placeholder="2301901244" value="2301901244">
+            <input type="text" id="f-std" value="2301901244">
           </div>
         </div>
-
         <div class="field-group">
           <label>Institution</label>
-          <input type="text" id="f-inst" placeholder="Institution name" value="Uganda Institute of ICT">
+          <input type="text" id="f-inst" value="Uganda Institute of ICT">
         </div>
-
         <div class="field-group">
           <label>Faculty / Department</label>
-          <input type="text" id="f-faculty" placeholder="Department name" value="Department of ICT and Engineering">
+          <input type="text" id="f-faculty" value="Department of ICT and Engineering">
         </div>
-
         <div class="field-group">
           <label>Programme</label>
-          <input type="text" id="f-prog" placeholder="Programme name"
-            value="Diploma in Electrical & Electronics Engineering">
+          <input type="text" id="f-prog" value="Diploma in Electrical &amp; Electronics Engineering">
         </div>
 
         <div class="section-divider">Academic Details</div>
@@ -623,59 +428,49 @@
         <div class="grid-2">
           <div class="field-group">
             <label>CGPA</label>
-            <input type="text" id="f-cgpa" placeholder="e.g. 3.93" value="3.93">
+            <input type="text" id="f-cgpa" value="3.93">
           </div>
           <div class="field-group">
             <label>Class</label>
-            <input type="text" id="f-class" placeholder="e.g. Credit" value="CLASS II (CREDIT)">
+            <input type="text" id="f-class" value="CLASS II (CREDIT)">
           </div>
         </div>
-
         <div class="field-group">
           <label>Year Completed</label>
-          <input type="text" id="f-year" placeholder="e.g. 2024/2025" value="2024/2025">
+          <input type="text" id="f-year" value="2024/2025">
         </div>
-
         <div class="field-group">
           <label>Transcript No. (optional)</label>
-          <input type="text" id="f-transcript" placeholder="Transcript reference">
+          <input type="text" id="f-transcript" placeholder="Leave blank if none">
         </div>
 
-        <div class="section-divider">⚠ Note on Photo</div>
-        <p style="font-size:0.62rem;line-height:1.7;opacity:0.6;">Photos cannot be stored in QR codes. The card will
-          show a photo placeholder when scanned. To add a photo, host your own database version.</p>
-
-        <button class="generate-btn" onclick="generate()">⬛ Generate QR Code</button>
+        <button class="generate-btn" onclick="generate()">Generate QR Code</button>
       </div>
 
-      <!-- Preview -->
       <div class="preview-panel">
         <div class="panel-title">QR Code Preview</div>
 
         <div id="placeholder" class="placeholder-msg">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="3" y="3" width="7" height="7" />
             <rect x="14" y="3" width="7" height="7" />
             <rect x="3" y="14" width="7" height="7" />
             <rect x="17" y="17" width="4" height="4" />
           </svg>
-          <p>Fill in student details<br>and click Generate.<br><br>Scanning the QR will open<br>a formatted ID card.</p>
+          <p>Fill in student details<br>and click Generate.<br><br>When scanned, the QR<br>opens a formatted student
+            card.</p>
         </div>
 
         <div id="card-wrap" class="hidden">
           <div class="mini-card">
-            <div class="card-header">
-              <div class="inst" id="c-inst">Institution</div>
-              <div class="dept" id="c-faculty">Faculty</div>
+            <div class="mini-card-header">
+              <div class="m-inst" id="c-inst">Institution</div>
+              <div class="m-dept" id="c-faculty">Faculty</div>
             </div>
-            <div class="card-body">
-              <div class="mini-name" id="c-name">STUDENT NAME</div>
-              <div class="qr-section" style="width:100%;border-top:none;padding-top:0">
-                <div id="qr-display"></div>
-              </div>
-              <div
-                style="font-size:0.58rem;opacity:0.5;letter-spacing:0.1em;text-transform:uppercase;text-align:center;">
-                Scan to view full ID card</div>
+            <div class="mini-card-body">
+              <div class="mini-name" id="c-name">NAME</div>
+              <div id="qr-display"></div>
+              <div class="scan-hint">Scan to view full ID card</div>
             </div>
           </div>
 
@@ -691,130 +486,92 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-     DISPLAY MODE (shown when QR is scanned)
-═══════════════════════════════════════════ -->
+  <!-- ══ DISPLAY MODE — shown when QR is scanned ══ -->
   <div id="display-mode">
-    <div class="full-card">
-      <div class="fc-header">
-        <div class="stripe"></div>
-        <div class="logo-area">
-          <div class="logo-circle" id="d-logo">U</div>
-          <div>
-            <div class="inst-name" id="d-inst">Institution</div>
-            <div class="inst-sub" id="d-faculty">Faculty / Department</div>
-          </div>
+    <div class="d-topbar" id="d-topbar">Uganda Institute of ICT</div>
+
+    <div class="d-card">
+      <div class="d-photo-area">
+        <div class="d-photo-box" id="d-photo-box">
+          <span>No Photo</span>
         </div>
       </div>
 
-      <div class="fc-body">
-        <div class="fc-profile">
-          <div class="fc-photo" id="d-photo">
-            <span
-              style="padding:0.5rem;font-size:0.55rem;letter-spacing:0.06em;text-transform:uppercase;text-align:center;">No
-              Photo</span>
-          </div>
-          <div class="fc-name-block">
-            <div class="fc-name" id="d-name">Student Name</div>
-            <div class="fc-prog" id="d-prog">Programme</div>
-          </div>
+      <div class="d-name-banner" id="d-name">STUDENT NAME</div>
+
+      <div class="d-rows">
+        <div class="d-row">
+          <span class="d-label">RegNo.</span>
+          <span class="d-value" id="d-reg">—</span>
         </div>
-
-        <hr class="fc-divider">
-
-        <table class="fc-table">
-          <tr>
-            <td>Reg. No.</td>
-            <td id="d-reg">—</td>
-          </tr>
-          <tr>
-            <td>Student No.</td>
-            <td id="d-std">—</td>
-          </tr>
-          <tr class="fc-cgpa-row">
-            <td>CGPA</td>
-            <td id="d-cgpa">—</td>
-          </tr>
-          <tr>
-            <td>Class</td>
-            <td id="d-class">—</td>
-          </tr>
-          <tr>
-            <td>Completed</td>
-            <td id="d-year">—</td>
-          </tr>
-          <tr id="d-tr-trans" class="hidden">
-            <td>Transcript</td>
-            <td id="d-transcript">—</td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="fc-footer">
-        <div class="verified">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6dde9a" stroke-width="2.5">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-          Verified Record
+        <div class="d-row">
+          <span class="d-label">StdNo.</span>
+          <span class="d-value" id="d-std">—</span>
         </div>
-        <div class="scan-label">Official Academic Record</div>
+        <div class="d-row">
+          <span class="d-label">Faculty</span>
+          <span class="d-value" id="d-faculty">—</span>
+        </div>
+        <div class="d-row">
+          <span class="d-label">Programme</span>
+          <span class="d-value" id="d-prog">—</span>
+        </div>
+        <div class="d-row">
+          <span class="d-label">CGPA</span>
+          <span class="d-value" id="d-cgpa">—</span>
+        </div>
+        <div class="d-row">
+          <span class="d-label">CLASS</span>
+          <span class="d-value" id="d-class">—</span>
+        </div>
+        <div class="d-row">
+          <span class="d-label">Completed</span>
+          <span class="d-value" id="d-year">—</span>
+        </div>
+        <div class="d-row" id="d-tr-trans" style="display:none">
+          <span class="d-label">Transcript No.</span>
+          <span class="d-value" id="d-transcript">—</span>
+        </div>
       </div>
     </div>
-
-    <div class="powered">Powered by Student QR System</div>
   </div>
 
   <script>
-    // ─── Check if opened via QR scan (has URL params) ───
+    // ── If opened via QR scan (URL has ?name=...) show display mode ──
     const params = new URLSearchParams(window.location.search);
 
     if (params.has('name')) {
-      // DISPLAY MODE
       document.getElementById('generator-mode').style.display = 'none';
       document.getElementById('display-mode').style.display = 'flex';
 
-      const get = (k) => decodeURIComponent(params.get(k) || '—');
+      const get = (k) => params.get(k) ? decodeURIComponent(params.get(k)) : '—';
 
-      const inst = get('inst');
-      const faculty = get('faculty');
-
-      document.getElementById('d-inst').textContent = inst;
-      document.getElementById('d-faculty').textContent = faculty;
-      document.getElementById('d-logo').textContent = inst.charAt(0).toUpperCase();
+      document.getElementById('d-topbar').textContent = get('inst');
       document.getElementById('d-name').textContent = get('name');
-      document.getElementById('d-prog').textContent = get('prog');
       document.getElementById('d-reg').textContent = get('reg');
       document.getElementById('d-std').textContent = get('std');
+      document.getElementById('d-faculty').textContent = get('faculty');
+      document.getElementById('d-prog').textContent = get('prog');
       document.getElementById('d-cgpa').textContent = get('cgpa');
       document.getElementById('d-class').textContent = get('cls');
       document.getElementById('d-year').textContent = get('year');
 
       const trans = params.get('trans');
-      if (trans && trans !== 'null' && trans !== '') {
-        document.getElementById('d-tr-trans').classList.remove('hidden');
+      if (trans && trans.trim() !== '') {
+        document.getElementById('d-tr-trans').style.display = 'flex';
         document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
       }
 
       document.title = get('name') + ' · Student ID';
     }
 
-    // ─── Generator Logic ───
-    let qrInstance = null;
-
+    // ── Generator ──
     function buildURL(data) {
       const base = window.location.href.split('?')[0];
       const p = new URLSearchParams({
-        name: data.name,
-        reg: data.reg,
-        std: data.std,
-        inst: data.inst,
-        faculty: data.faculty,
-        prog: data.prog,
-        cgpa: data.cgpa,
-        cls: data.cls,
-        year: data.year,
-        trans: data.trans
+        name: data.name, reg: data.reg, std: data.std,
+        inst: data.inst, faculty: data.faculty, prog: data.prog,
+        cgpa: data.cgpa, cls: data.cls, year: data.year, trans: data.trans
       });
       return base + '?' + p.toString();
     }
@@ -842,12 +599,9 @@
 
       const qrDiv = document.getElementById('qr-display');
       qrDiv.innerHTML = '';
-      qrInstance = new QRCode(qrDiv, {
-        text: url,
-        width: 140,
-        height: 140,
-        colorDark: '#0a0a0f',
-        colorLight: '#ffffff',
+      new QRCode(qrDiv, {
+        text: url, width: 130, height: 130,
+        colorDark: '#000000', colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.M
       });
 
@@ -863,46 +617,47 @@
         link.download = 'student-qr.png';
         link.href = canvas.toDataURL();
         link.click();
-      }, 200);
+      }, 300);
+    }
+
+    function populateDisplayMode(p) {
+      const get = (k) => p.get(k) ? decodeURIComponent(p.get(k)) : '—';
+      document.getElementById('d-topbar').textContent = get('inst');
+      document.getElementById('d-name').textContent = get('name');
+      document.getElementById('d-reg').textContent = get('reg');
+      document.getElementById('d-std').textContent = get('std');
+      document.getElementById('d-faculty').textContent = get('faculty');
+      document.getElementById('d-prog').textContent = get('prog');
+      document.getElementById('d-cgpa').textContent = get('cgpa');
+      document.getElementById('d-class').textContent = get('cls');
+      document.getElementById('d-year').textContent = get('year');
+      const trans = p.get('trans');
+      if (trans && trans.trim() !== '') {
+        document.getElementById('d-tr-trans').style.display = 'flex';
+        document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
+      } else {
+        document.getElementById('d-tr-trans').style.display = 'none';
+      }
     }
 
     function previewCard() {
       const url = document.getElementById('url-preview').textContent;
       if (url === '—') { alert('Generate a QR code first.'); return; }
 
-      const queryString = url.includes('?') ? url.split('?')[1] : '';
-      if (!queryString) return;
+      const qs = url.includes('?') ? url.split('?')[1] : '';
+      if (!qs) return;
 
-      const tempParams = new URLSearchParams(queryString);
-      const get = (k) => decodeURIComponent(tempParams.get(k) || '—');
+      populateDisplayMode(new URLSearchParams(qs));
 
       document.getElementById('generator-mode').style.display = 'none';
       const dm = document.getElementById('display-mode');
       dm.style.display = 'flex';
 
-      const inst = get('inst');
-      document.getElementById('d-inst').textContent = inst;
-      document.getElementById('d-faculty').textContent = get('faculty');
-      document.getElementById('d-logo').textContent = inst.charAt(0).toUpperCase();
-      document.getElementById('d-name').textContent = get('name');
-      document.getElementById('d-prog').textContent = get('prog');
-      document.getElementById('d-reg').textContent = get('reg');
-      document.getElementById('d-std').textContent = get('std');
-      document.getElementById('d-cgpa').textContent = get('cgpa');
-      document.getElementById('d-class').textContent = get('cls');
-      document.getElementById('d-year').textContent = get('year');
-
-      const trans = tempParams.get('trans');
-      if (trans && trans !== 'null' && trans !== '') {
-        document.getElementById('d-tr-trans').classList.remove('hidden');
-        document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
-      }
-
       if (!document.getElementById('back-btn')) {
         const btn = document.createElement('button');
         btn.id = 'back-btn';
         btn.textContent = '← Back to Generator';
-        btn.style.cssText = 'margin-top:1rem;background:transparent;border:2px solid #aaa;color:#666;font-family:Space Mono,monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 1.2rem;cursor:pointer;';
+        btn.style.cssText = 'margin:1.5rem auto;display:block;background:transparent;border:1px solid #aaa;color:#666;font-family:Arial,sans-serif;font-size:0.75rem;padding:0.5rem 1.2rem;cursor:pointer;';
         btn.onclick = () => {
           dm.style.display = 'none';
           document.getElementById('generator-mode').style.display = 'block';
