@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student ID · QR Generator</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --ink: #0a0a0f;
+      --paper: #f5f0e8;
+      --accent: #c8423a;
+      --mid: #2a2a3a;
+      --line: rgba(10, 10, 15, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+    }
+
+    /* ─── GENERATOR MODE ─── */
+    #generator-mode header {
+      border-bottom: 2px solid var(--ink);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    #generator-mode header h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+    }
+
+    #generator-mode header .badge {
+      background: var(--accent);
+      color: white;
+      font-size: 0.65rem;
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 65px);
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-panel {
+      padding: 2.5rem 2rem;
+      border-right: 2px solid var(--ink);
+    }
+
+    .panel-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.3;
+    }
+
+    .field-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid var(--ink);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      padding: 0.6rem 0.8rem;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      background: rgba(200, 66, 58, 0.04);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .section-divider {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink);
+      opacity: 0.4;
+      padding: 1rem 0 0.75rem;
+      border-top: 1px solid var(--line);
+      margin-top: 0.5rem;
+    }
+
+    .generate-btn {
+      width: 100%;
+      background: var(--ink);
+      color: var(--paper);
+      border: 2px solid var(--ink);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.9rem;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .generate-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .preview-panel {
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .url-box {
+      width: 100%;
+      max-width: 340px;
+      margin-top: 1rem;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.75rem 1rem;
+      font-size: 0.55rem;
+      word-break: break-all;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+    }
+
+    .url-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      opacity: 0.6;
+      margin-top: 0.75rem;
+      align-self: flex-start;
+      margin-left: 0;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .placeholder-msg {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0.35;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .placeholder-msg p {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      line-height: 1.6;
+    }
+
+    /* Mini card in generator */
+    .mini-card {
+      width: 100%;
+      max-width: 340px;
+      border: 2px solid var(--ink);
+      background: white;
+      box-shadow: 6px 6px 0 var(--ink);
+      animation: slideIn 0.4s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .mini-card .card-header {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.85rem 1rem;
+      text-align: center;
+    }
+
+    .mini-card .card-header .inst {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .mini-card .card-header .dept {
+      font-size: 0.58rem;
+      opacity: 0.7;
+      letter-spacing: 0.08em;
+      margin-top: 0.15rem;
+    }
+
+    .mini-card .card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .mini-card .qr-section {
+      border-top: 2px solid var(--ink);
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .mini-card .qr-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      opacity: 0.5;
+    }
+
+    #qr-display canvas,
+    #qr-display img {
+      max-width: 110px !important;
+      height: auto !important;
+    }
+
+    .mini-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .actions {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .btn-outline {
+      flex: 1;
+      background: transparent;
+      border: 2px solid var(--ink);
+      color: var(--ink);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.65rem;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-outline:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* ─── CARD DISPLAY MODE (when opened via QR scan) ─── */
+    #display-mode {
+      display: none;
+      min-height: 100vh;
+      background: #eef2f7;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      flex-direction: column;
+    }
+
+    .full-card {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 0;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+      animation: rise 0.5s ease;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .full-card .fc-header {
+      background: #1a2340;
+      color: white;
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .fc-header .stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #c8423a, #e8854a, #c8423a);
+    }
+
+    .fc-header .logo-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .fc-header .logo-circle {
+      width: 40px;
+      height: 40px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .fc-header .inst-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .fc-header .inst-sub {
+      font-size: 0.58rem;
+      opacity: 0.6;
+      letter-spacing: 0.1em;
+      text-align: left;
+      margin-top: 0.1rem;
+    }
+
+    .fc-body {
+      padding: 1.5rem;
+    }
+
+    .fc-profile {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      margin-bottom: 1.2rem;
+    }
+
+    .fc-photo {
+      width: 100px;
+      height: 120px;
+      border: 3px solid #1a2340;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #eef2f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .fc-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fc-name-block {
+      flex: 1;
+    }
+
+    .fc-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #1a2340;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .fc-prog {
+      font-size: 0.65rem;
+      color: #c8423a;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    .fc-divider {
+      border: none;
+      border-top: 2px solid #eef2f7;
+      margin: 0.8rem 0;
+    }
+
+    .fc-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .fc-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .fc-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .fc-table td {
+      padding: 0.45rem 0.25rem;
+      vertical-align: top;
+      font-size: 0.72rem;
+    }
+
+    .fc-table td:first-child {
+      color: #888;
+      text-transform: uppercase;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      width: 38%;
+      padding-right: 0.5rem;
+      font-weight: 700;
+    }
+
+    .fc-table td:last-child {
+      color: #1a2340;
+      font-weight: 700;
+    }
+
+    .fc-cgpa-row td:last-child {
+      color: #c8423a;
+      font-size: 0.95rem;
+    }
+
+    .fc-footer {
+      background: #1a2340;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .fc-footer .verified {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #6dde9a;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .fc-footer .verified svg {
+      flex-shrink: 0;
+    }
+
+    .fc-footer .scan-label {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .powered {
+      margin-top: 1.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════
+     GENERATOR MODE (default view)
+═══════════════════════════════════════════ -->
+  <div id="generator-mode">
+    <header>
+      <h1>Student ID · QR Generator</h1>
+      <div class="badge">QR → Card</div>
+    </header>
+
+    <div class="layout">
+      <!-- Form -->
+      <div class="form-panel">
+        <div class="panel-title">Student Information</div>
+
+        <div class="field-group">
+          <label>Full Name</label>
+          <input type="text" id="f-name" placeholder="e.g. GUMANAMANI ANORLD" value="GUMANAMANI ANORLD">
+        </div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <label>Reg. No.</label>
+            <input type="text" id="f-reg" placeholder="2023/DEE/..." value="2023/DEE/DAY/1244/G">
+          </div>
+          <div class="field-group">
+            <label>Student No.</label>
+            <input type="text" id="f-std" placeholder="2301901244" value="2301901244">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Institution</label>
+          <input type="text" id="f-inst" placeholder="Institution name" value="Uganda Institute of ICT">
+        </div>
+
+        <div class="field-group">
+          <label>Faculty / Department</label>
+          <input type="text" id="f-faculty" placeholder="Department name" value="Department of ICT and Engineering">
+        </div>
+
+        <div class="field-group">
+          <label>Programme</label>
+          <input type="text" id="f-prog" placeholder="Programme name"
+            value="Diploma in Electrical & Electronics Engineering">
+        </div>
+
+        <div class="section-divider">Academic Details</div>
+
+        <div class="grid-2">
+          <div class="field-group">
+            <label>CGPA</label>
+            <input type="text" id="f-cgpa" placeholder="e.g. 3.93" value="3.93">
+          </div>
+          <div class="field-group">
+            <label>Class</label>
+            <input type="text" id="f-class" placeholder="e.g. Credit" value="CLASS II (CREDIT)">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Year Completed</label>
+          <input type="text" id="f-year" placeholder="e.g. 2024/2025" value="2024/2025">
+        </div>
+
+        <div class="field-group">
+          <label>Transcript No. (optional)</label>
+          <input type="text" id="f-transcript" placeholder="Transcript reference">
+        </div>
+
+        <div class="section-divider">⚠ Note on Photo</div>
+        <p style="font-size:0.62rem;line-height:1.7;opacity:0.6;">Photos cannot be stored in QR codes. The card will
+          show a photo placeholder when scanned. To add a photo, host your own database version.</p>
+
+        <button class="generate-btn" onclick="generate()">⬛ Generate QR Code</button>
+      </div>
+
+      <!-- Preview -->
+      <div class="preview-panel">
+        <div class="panel-title">QR Code Preview</div>
+
+        <div id="placeholder" class="placeholder-msg">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+            <rect x="17" y="17" width="4" height="4" />
+          </svg>
+          <p>Fill in student details<br>and click Generate.<br><br>Scanning the QR will open<br>a formatted ID card.</p>
+        </div>
+
+        <div id="card-wrap" class="hidden">
+          <div class="mini-card">
+            <div class="card-header">
+              <div class="inst" id="c-inst">Institution</div>
+              <div class="dept" id="c-faculty">Faculty</div>
+            </div>
+            <div class="card-body">
+              <div class="mini-name" id="c-name">STUDENT NAME</div>
+              <div class="qr-section" style="width:100%;border-top:none;padding-top:0">
+                <div id="qr-display"></div>
+              </div>
+              <div
+                style="font-size:0.58rem;opacity:0.5;letter-spacing:0.1em;text-transform:uppercase;text-align:center;">
+                Scan to view full ID card</div>
+            </div>
+          </div>
+
+          <div class="url-label">QR encodes this URL:</div>
+          <div class="url-box" id="url-preview">—</div>
+
+          <div class="actions">
+            <button class="btn-outline" onclick="downloadQR()">↓ Download QR</button>
+            <button class="btn-outline" onclick="previewCard()">👁 Preview Card</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+     DISPLAY MODE (shown when QR is scanned)
+═══════════════════════════════════════════ -->
+  <div id="display-mode">
+    <div class="full-card">
+      <div class="fc-header">
+        <div class="stripe"></div>
+        <div class="logo-area">
+          <div class="logo-circle" id="d-logo">U</div>
+          <div>
+            <div class="inst-name" id="d-inst">Institution</div>
+            <div class="inst-sub" id="d-faculty">Faculty / Department</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-body">
+        <div class="fc-profile">
+          <div class="fc-photo" id="d-photo">
+            <span
+              style="padding:0.5rem;font-size:0.55rem;letter-spacing:0.06em;text-transform:uppercase;text-align:center;">No
+              Photo</span>
+          </div>
+          <div class="fc-name-block">
+            <div class="fc-name" id="d-name">Student Name</div>
+            <div class="fc-prog" id="d-prog">Programme</div>
+          </div>
+        </div>
+
+        <hr class="fc-divider">
+
+        <table class="fc-table">
+          <tr>
+            <td>Reg. No.</td>
+            <td id="d-reg">—</td>
+          </tr>
+          <tr>
+            <td>Student No.</td>
+            <td id="d-std">—</td>
+          </tr>
+          <tr class="fc-cgpa-row">
+            <td>CGPA</td>
+            <td id="d-cgpa">—</td>
+          </tr>
+          <tr>
+            <td>Class</td>
+            <td id="d-class">—</td>
+          </tr>
+          <tr>
+            <td>Completed</td>
+            <td id="d-year">—</td>
+          </tr>
+          <tr id="d-tr-trans" class="hidden">
+            <td>Transcript</td>
+            <td id="d-transcript">—</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="fc-footer">
+        <div class="verified">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6dde9a" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+          Verified Record
+        </div>
+        <div class="scan-label">Official Academic Record</div>
+      </div>
+    </div>
+
+    <div class="powered">Powered by Student QR System</div>
+  </div>
+
+  <script>
+    // ─── Check if opened via QR scan (has URL params) ───
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has('name')) {
+      // DISPLAY MODE
+      document.getElementById('generator-mode').style.display = 'none';
+      document.getElementById('display-mode').style.display = 'flex';
+
+      const get = (k) => decodeURIComponent(params.get(k) || '—');
+
+      const inst = get('inst');
+      const faculty = get('faculty');
+
+      document.getElementById('d-inst').textContent = inst;
+      document.getElementById('d-faculty').textContent = faculty;
+      document.getElementById('d-logo').textContent = inst.charAt(0).toUpperCase();
+      document.getElementById('d-name').textContent = get('name');
+      document.getElementById('d-prog').textContent = get('prog');
+      document.getElementById('d-reg').textContent = get('reg');
+      document.getElementById('d-std').textContent = get('std');
+      document.getElementById('d-cgpa').textContent = get('cgpa');
+      document.getElementById('d-class').textContent = get('cls');
+      document.getElementById('d-year').textContent = get('year');
+
+      const trans = params.get('trans');
+      if (trans && trans !== 'null' && trans !== '') {
+        document.getElementById('d-tr-trans').classList.remove('hidden');
+        document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
+      }
+
+      document.title = get('name') + ' · Student ID';
+    }
+
+    // ─── Generator Logic ───
+    let qrInstance = null;
+
+    function buildURL(data) {
+      const base = window.location.href.split('?')[0];
+      const p = new URLSearchParams({
+        name: data.name,
+        reg: data.reg,
+        std: data.std,
+        inst: data.inst,
+        faculty: data.faculty,
+        prog: data.prog,
+        cgpa: data.cgpa,
+        cls: data.cls,
+        year: data.year,
+        trans: data.trans
+      });
+      return base + '?' + p.toString();
+    }
+
+    function generate() {
+      const data = {
+        name: document.getElementById('f-name').value.trim() || 'STUDENT',
+        reg: document.getElementById('f-reg').value.trim(),
+        std: document.getElementById('f-std').value.trim(),
+        inst: document.getElementById('f-inst').value.trim() || 'Institution',
+        faculty: document.getElementById('f-faculty').value.trim(),
+        prog: document.getElementById('f-prog').value.trim(),
+        cgpa: document.getElementById('f-cgpa').value.trim(),
+        cls: document.getElementById('f-class').value.trim(),
+        year: document.getElementById('f-year').value.trim(),
+        trans: document.getElementById('f-transcript').value.trim()
+      };
+
+      const url = buildURL(data);
+
+      document.getElementById('c-inst').textContent = data.inst;
+      document.getElementById('c-faculty').textContent = data.faculty;
+      document.getElementById('c-name').textContent = data.name;
+      document.getElementById('url-preview').textContent = url;
+
+      const qrDiv = document.getElementById('qr-display');
+      qrDiv.innerHTML = '';
+      qrInstance = new QRCode(qrDiv, {
+        text: url,
+        width: 140,
+        height: 140,
+        colorDark: '#0a0a0f',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      document.getElementById('placeholder').classList.add('hidden');
+      document.getElementById('card-wrap').classList.remove('hidden');
+    }
+
+    function downloadQR() {
+      setTimeout(() => {
+        const canvas = document.querySelector('#qr-display canvas');
+        if (!canvas) { alert('Generate a QR code first.'); return; }
+        const link = document.createElement('a');
+        link.download = 'student-qr.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      }, 200);
+    }
+
+    function previewCard() {
+      const url = document.getElementById('url-preview').textContent;
+      if (url === '—') { alert('Generate a QR code first.'); return; }
+
+      const queryString = url.includes('?') ? url.split('?')[1] : '';
+      if (!queryString) return;
+
+      const tempParams = new URLSearchParams(queryString);
+      const get = (k) => decodeURIComponent(tempParams.get(k) || '—');
+
+      document.getElementById('generator-mode').style.display = 'none';
+      const dm = document.getElementById('display-mode');
+      dm.style.display = 'flex';
+
+      const inst = get('inst');
+      document.getElementById('d-inst').textContent = inst;
+      document.getElementById('d-faculty').textContent = get('faculty');
+      document.getElementById('d-logo').textContent = inst.charAt(0).toUpperCase();
+      document.getElementById('d-name').textContent = get('name');
+      document.getElementById('d-prog').textContent = get('prog');
+      document.getElementById('d-reg').textContent = get('reg');
+      document.getElementById('d-std').textContent = get('std');
+      document.getElementById('d-cgpa').textContent = get('cgpa');
+      document.getElementById('d-class').textContent = get('cls');
+      document.getElementById('d-year').textContent = get('year');
+
+      const trans = tempParams.get('trans');
+      if (trans && trans !== 'null' && trans !== '') {
+        document.getElementById('d-tr-trans').classList.remove('hidden');
+        document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
+      }
+
+      if (!document.getElementById('back-btn')) {
+        const btn = document.createElement('button');
+        btn.id = 'back-btn';
+        btn.textContent = '← Back to Generator';
+        btn.style.cssText = 'margin-top:1rem;background:transparent;border:2px solid #aaa;color:#666;font-family:Space Mono,monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 1.2rem;cursor:pointer;';
+        btn.onclick = () => {
+          dm.style.display = 'none';
+          document.getElementById('generator-mode').style.display = 'block';
+          btn.remove();
+        };
+        dm.appendChild(btn);
+      }
+    }
+  </script>
+</body>
+
+</html>
