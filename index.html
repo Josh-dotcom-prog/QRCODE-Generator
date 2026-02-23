@@ -129,12 +129,6 @@
       border-color: #c8423a;
     }
 
-    input[type="file"] {
-      padding: 0.4rem 0.75rem;
-      font-size: 0.7rem;
-      cursor: pointer;
-    }
-
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -151,23 +145,48 @@
       margin-top: 0.3rem;
     }
 
-    /* Photo preview in form */
-    .photo-preview-wrap {
+    /* Info box for photo instructions */
+    .info-box {
+      background: #e8f4fd;
+      border-left: 3px solid #2196F3;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.6rem;
+      line-height: 1.8;
+      color: #333;
       margin-top: 0.5rem;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-size: 0.62rem;
+      color: #0a0a0f;
+    }
+
+    .info-box code {
+      background: #d0e8f8;
+      padding: 0.1rem 0.3rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+    }
+
+    /* Photo preview */
+    .photo-preview-wrap {
+      margin-top: 0.6rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.8rem;
     }
 
     #photo-thumb {
-      width: 70px;
-      height: 85px;
+      width: 60px;
+      height: 75px;
       object-fit: cover;
       border: 1.5px solid #0a0a0f;
       display: none;
     }
 
-    .photo-note {
+    .photo-status {
       font-size: 0.58rem;
       color: #777;
       line-height: 1.6;
@@ -193,11 +212,6 @@
       background: #c8423a;
     }
 
-    .generate-btn:disabled {
-      background: #888;
-      cursor: not-allowed;
-    }
-
     .placeholder-msg {
       display: flex;
       flex-direction: column;
@@ -216,7 +230,7 @@
 
     .mini-card {
       width: 100%;
-      max-width: 320px;
+      max-width: 300px;
       border: 2px solid #0a0a0f;
       background: white;
       box-shadow: 5px 5px 0 #0a0a0f;
@@ -260,7 +274,7 @@
 
     #qr-display canvas,
     #qr-display img {
-      max-width: 130px !important;
+      max-width: 150px !important;
       height: auto !important;
     }
 
@@ -272,37 +286,12 @@
       text-align: center;
     }
 
-    .url-label {
-      font-size: 0.58rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #777;
-      margin-top: 1rem;
-      width: 100%;
-      max-width: 320px;
-    }
-
-    .url-box {
-      width: 100%;
-      max-width: 320px;
-      background: #0a0a0f;
-      color: #f5f0e8;
-      padding: 0.65rem 0.9rem;
-      font-size: 0.5rem;
-      word-break: break-all;
-      line-height: 1.6;
-      opacity: 0.7;
-      margin-top: 0.3rem;
-      max-height: 80px;
-      overflow: hidden;
-    }
-
     .actions {
       margin-top: 1.2rem;
       display: flex;
       gap: 0.6rem;
       width: 100%;
-      max-width: 320px;
+      max-width: 300px;
     }
 
     .btn-outline {
@@ -325,19 +314,7 @@
       color: #f5f0e8;
     }
 
-    .warn-box {
-      width: 100%;
-      max-width: 320px;
-      margin-top: 0.75rem;
-      background: #fff8e1;
-      border-left: 3px solid #f5a623;
-      padding: 0.6rem 0.75rem;
-      font-size: 0.58rem;
-      line-height: 1.6;
-      color: #555;
-    }
-
-    /* ══ DISPLAY MODE — matches the image exactly ══ */
+    /* ══ DISPLAY MODE — exact match to image ══ */
     #display-mode {
       display: none;
       min-height: 100vh;
@@ -432,7 +409,7 @@
   <div id="generator-mode">
     <header>
       <h1>Student ID · QR Generator</h1>
-      <div class="badge">QR → Card</div>
+      <div class="badge">GitHub Photos</div>
     </header>
 
     <div class="layout">
@@ -490,21 +467,26 @@
         <div class="section-divider">Student Photo</div>
 
         <div class="field-group">
-          <label>Upload Photo</label>
-          <input type="file" id="f-photo" accept="image/*" onchange="handlePhoto(this)">
+          <label>Photo URL (from GitHub)</label>
+          <input type="text" id="f-photo-url" placeholder="https://yourusername.github.io/student-id-qr/photos/name.jpg"
+            oninput="previewPhotoURL(this.value)">
+
           <div class="photo-preview-wrap">
             <img id="photo-thumb" alt="Preview">
-            <div class="photo-note" id="photo-note">
-              Photo will appear on the card when scanned.<br>
-              Image is compressed automatically.
-            </div>
+            <div class="photo-status" id="photo-status">Paste the GitHub photo URL above.</div>
+          </div>
+
+          <div class="info-box">
+            <strong>📁 How to add a photo:</strong>
+            1. In your GitHub repo, create a folder called <code>photos</code><br>
+            2. Upload the student's photo there (e.g. <code>gumanamani.jpg</code>)<br>
+            3. The URL will be:<br>
+            <code>https://yourusername.github.io/student-id-qr/photos/gumanamani.jpg</code><br>
+            4. Paste that URL in the field above
           </div>
         </div>
 
-        <button class="generate-btn" id="gen-btn" onclick="generate()">Generate QR Code</button>
-        <div id="processing-msg" class="hidden"
-          style="text-align:center;font-size:0.7rem;margin-top:0.5rem;opacity:0.6;">Processing image, please wait...
-        </div>
+        <button class="generate-btn" onclick="generate()">Generate QR Code</button>
       </div>
 
       <div class="preview-panel">
@@ -518,7 +500,7 @@
             <rect x="17" y="17" width="4" height="4" />
           </svg>
           <p>Fill in student details<br>and click Generate.<br><br>When scanned, the QR<br>opens a formatted student
-            card.</p>
+            card<br>with the photo.</p>
         </div>
 
         <div id="card-wrap" class="hidden">
@@ -534,13 +516,6 @@
             </div>
           </div>
 
-          <div id="warn-photo" class="warn-box hidden">
-            ⚠ Photo makes the QR very dense. If it doesn't scan, try a lower quality setting or remove the photo.
-          </div>
-
-          <div class="url-label">QR encodes this URL:</div>
-          <div class="url-box" id="url-preview">—</div>
-
           <div class="actions">
             <button class="btn-outline" onclick="downloadQR()">↓ Download QR</button>
             <button class="btn-outline" onclick="previewCard()">👁 Preview Card</button>
@@ -550,9 +525,9 @@
     </div>
   </div>
 
-  <!-- ══ DISPLAY MODE ══ -->
+  <!-- ══ DISPLAY MODE — what shows when QR is scanned ══ -->
   <div id="display-mode">
-    <div class="d-topbar" id="d-topbar">Uganda Institute of ICT</div>
+    <div class="d-topbar" id="d-topbar">Institution</div>
 
     <div class="d-card">
       <div class="d-photo-area">
@@ -580,45 +555,22 @@
   </div>
 
   <script>
-    // ── Photo handling ──
-    let compressedPhotoData = null;
-
-    function handlePhoto(input) {
-      const file = input.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          // Show thumbnail in form
-          const thumb = document.getElementById('photo-thumb');
-          thumb.src = e.target.result;
-          thumb.style.display = 'block';
-
-          // Compress image to fit in URL (target ~60x75px, JPEG quality 0.5)
-          const canvas = document.createElement('canvas');
-          const MAX_W = 80, MAX_H = 100;
-          let w = img.width, h = img.height;
-          if (w / h > MAX_W / MAX_H) { w = MAX_W; h = Math.round(MAX_W * img.height / img.width); }
-          else { h = MAX_H; w = Math.round(MAX_H * img.width / img.height); }
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-
-          // Try different quality levels until URL is manageable
-          let quality = 0.5;
-          let dataUrl = canvas.toDataURL('image/jpeg', quality);
-
-          // Strip the data:image/jpeg;base64, prefix — store only the base64
-          compressedPhotoData = dataUrl.split(',')[1];
-
-          const sizeKB = Math.round(compressedPhotoData.length * 0.75 / 1024);
-          document.getElementById('photo-note').textContent =
-            `Photo ready (${sizeKB}KB compressed). ${sizeKB > 100 ? 'Warning: may make QR hard to scan.' : 'Size is OK for QR.'}`;
-        };
-        img.src = e.target.result;
+    // ── Preview photo URL as user types ──
+    function previewPhotoURL(url) {
+      const thumb = document.getElementById('photo-thumb');
+      const status = document.getElementById('photo-status');
+      if (!url.trim()) {
+        thumb.style.display = 'none';
+        status.textContent = 'Paste the GitHub photo URL above.';
+        return;
+      }
+      thumb.src = url;
+      thumb.style.display = 'block';
+      thumb.onload = () => { status.textContent = '✅ Photo loaded successfully.'; };
+      thumb.onerror = () => {
+        thumb.style.display = 'none';
+        status.textContent = '❌ Could not load photo. Check the URL is correct and the file is uploaded to GitHub.';
       };
-      reader.readAsDataURL(file);
     }
 
     // ── If opened via QR scan ──
@@ -646,13 +598,13 @@
         document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
       }
 
-      // Load photo if present
-      const photo = params.get('photo');
-      if (photo && photo.trim() !== '') {
+      // Load photo from URL
+      const photoUrl = params.get('photo');
+      if (photoUrl && photoUrl.trim() !== '') {
         const photoBox = document.getElementById('d-photo-box');
-        document.getElementById('d-no-photo').style.display = 'none';
+        document.getElementById('d-no-photo').remove();
         const imgEl = document.createElement('img');
-        imgEl.src = 'data:image/jpeg;base64,' + photo;
+        imgEl.src = decodeURIComponent(photoUrl);
         imgEl.alt = get('name');
         photoBox.appendChild(imgEl);
       }
@@ -668,7 +620,7 @@
         inst: data.inst, faculty: data.faculty, prog: data.prog,
         cgpa: data.cgpa, cls: data.cls, year: data.year, trans: data.trans
       });
-      if (data.photo) p.set('photo', data.photo);
+      if (data.photoUrl) p.set('photo', data.photoUrl);
       return base + '?' + p.toString();
     }
 
@@ -684,7 +636,7 @@
         cls: document.getElementById('f-class').value.trim(),
         year: document.getElementById('f-year').value.trim(),
         trans: document.getElementById('f-transcript').value.trim(),
-        photo: compressedPhotoData || ''
+        photoUrl: document.getElementById('f-photo-url').value.trim()
       };
 
       const url = buildURL(data);
@@ -692,26 +644,17 @@
       document.getElementById('c-inst').textContent = data.inst;
       document.getElementById('c-faculty').textContent = data.faculty;
       document.getElementById('c-name').textContent = data.name;
-      document.getElementById('url-preview').textContent = url.substring(0, 200) + (url.length > 200 ? '...' : '');
 
       const qrDiv = document.getElementById('qr-display');
       qrDiv.innerHTML = '';
-
-      // Use lower error correction when photo is included to keep QR scannable
-      const ecLevel = data.photo ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M;
-
       new QRCode(qrDiv, {
-        text: url, width: 160, height: 160,
-        colorDark: '#000000', colorLight: '#ffffff',
-        correctLevel: ecLevel
+        text: url,
+        width: 150,
+        height: 150,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
       });
-
-      // Warn if URL is very long
-      if (url.length > 2000) {
-        document.getElementById('warn-photo').classList.remove('hidden');
-      } else {
-        document.getElementById('warn-photo').classList.add('hidden');
-      }
 
       document.getElementById('placeholder').classList.add('hidden');
       document.getElementById('card-wrap').classList.remove('hidden');
@@ -728,45 +671,37 @@
       }, 300);
     }
 
-    function populateDisplayMode(p) {
-      const get = (k) => p.get(k) ? decodeURIComponent(p.get(k)) : '—';
-      document.getElementById('d-topbar').textContent = get('inst');
-      document.getElementById('d-name').textContent = get('name');
-      document.getElementById('d-reg').textContent = get('reg');
-      document.getElementById('d-std').textContent = get('std');
-      document.getElementById('d-faculty').textContent = get('faculty');
-      document.getElementById('d-prog').textContent = get('prog');
-      document.getElementById('d-cgpa').textContent = get('cgpa');
-      document.getElementById('d-class').textContent = get('cls');
-      document.getElementById('d-year').textContent = get('year');
+    function populateDisplayMode(data) {
+      document.getElementById('d-topbar').textContent = data.inst;
+      document.getElementById('d-name').textContent = data.name;
+      document.getElementById('d-reg').textContent = data.reg || '—';
+      document.getElementById('d-std').textContent = data.std || '—';
+      document.getElementById('d-faculty').textContent = data.faculty || '—';
+      document.getElementById('d-prog').textContent = data.prog || '—';
+      document.getElementById('d-cgpa').textContent = data.cgpa || '—';
+      document.getElementById('d-class').textContent = data.cls || '—';
+      document.getElementById('d-year').textContent = data.year || '—';
 
-      const trans = p.get('trans');
-      if (trans && trans.trim() !== '') {
+      if (data.trans && data.trans.trim() !== '') {
         document.getElementById('d-tr-trans').style.display = 'flex';
-        document.getElementById('d-transcript').textContent = decodeURIComponent(trans);
+        document.getElementById('d-transcript').textContent = data.trans;
       } else {
         document.getElementById('d-tr-trans').style.display = 'none';
       }
 
       // Photo
-      const photo = p.get('photo');
       const photoBox = document.getElementById('d-photo-box');
-      // Clear previous
       photoBox.innerHTML = '<span id="d-no-photo">No Photo</span>';
-      if (photo && photo.trim() !== '') {
+      if (data.photoUrl && data.photoUrl.trim() !== '') {
         document.getElementById('d-no-photo').style.display = 'none';
         const imgEl = document.createElement('img');
-        imgEl.src = 'data:image/jpeg;base64,' + photo;
-        imgEl.alt = get('name');
+        imgEl.src = data.photoUrl;
+        imgEl.alt = data.name;
         photoBox.appendChild(imgEl);
       }
     }
 
     function previewCard() {
-      const urlText = document.getElementById('url-preview').textContent;
-      if (urlText === '—') { alert('Generate a QR code first.'); return; }
-
-      // Rebuild full URL from stored data
       const data = {
         name: document.getElementById('f-name').value.trim() || 'STUDENT',
         reg: document.getElementById('f-reg').value.trim(),
@@ -778,17 +713,15 @@
         cls: document.getElementById('f-class').value.trim(),
         year: document.getElementById('f-year').value.trim(),
         trans: document.getElementById('f-transcript').value.trim(),
-        photo: compressedPhotoData || ''
+        photoUrl: document.getElementById('f-photo-url').value.trim()
       };
 
-      const p = new URLSearchParams({
-        name: data.name, reg: data.reg, std: data.std,
-        inst: data.inst, faculty: data.faculty, prog: data.prog,
-        cgpa: data.cgpa, cls: data.cls, year: data.year, trans: data.trans,
-        photo: data.photo
-      });
+      if (!document.getElementById('card-wrap').classList.contains('hidden') === false) {
+        alert('Generate a QR code first.');
+        return;
+      }
 
-      populateDisplayMode(p);
+      populateDisplayMode(data);
 
       document.getElementById('generator-mode').style.display = 'none';
       const dm = document.getElementById('display-mode');
