@@ -621,6 +621,11 @@
         cgpa: data.cgpa, cls: data.cls, year: data.year, trans: data.trans
       });
       if (data.photoUrl) p.set('photo', data.photoUrl);
+
+      // Add a unique token so every generated QR opens as a fresh scan target.
+      const scanToken = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      p.set('scan', scanToken);
+
       return base + '?' + p.toString();
     }
 
